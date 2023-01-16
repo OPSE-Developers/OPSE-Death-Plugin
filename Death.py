@@ -74,8 +74,12 @@ class DeathTool(Tool):
 
         # Create a profile for each Death account found
         # because each account might be a different person
+        strict = Config.is_strict()
         for dead in death_results:
             profile: Profile = self.get_default_profile().clone()
+            if not strict:
+                profile.set_firstname(dead.get('firstname'))
+                profile.set_lastname(dead.get('lastname'))
             profile.set_lst_middlenames(dead.get('lst_middlenames'))
             profile.set_gender(dead.get('gender'))
             profile.set_age(dead.get('age'))
@@ -173,6 +177,7 @@ class DeathTool(Tool):
                 + " " + lastname.capitalize() + " in a fuzzy search.")
 
             if len(lst_deads) > 0:
+                strict = Config.is_strict()
                 # Foreach dead found...
                 for dead in lst_deads:
 
@@ -180,7 +185,7 @@ class DeathTool(Tool):
                     d_lastname = dead.get('name', {}).get('last', "")
 
                     add_dead = False
-                    if Config.is_strict():
+                    if strict:
                         if firstname.lower() == d_firstname.lower() and lastname.lower() == d_lastname.lower():
                             add_dead = True
                     else:
