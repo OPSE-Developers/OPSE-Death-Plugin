@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+from typing import Any, Dict, List, Tuple
 import requests
 from datetime import datetime
 
@@ -25,14 +26,14 @@ class DeathTool(Tool):
         super().__init__()
 
     @staticmethod
-    def get_config() -> dict[str]:
+    def get_config() -> Dict[str, Any]:
         """Function which return tool configuration as a dictionnary."""
         return {
             'active': True,
         }
 
     @staticmethod
-    def get_lst_input_data_types() -> dict[str, bool]:
+    def get_lst_input_data_types() -> Dict[str, bool]:
         """
         Function which return the list of data types which can be use to run this Tool.
         It's will help to make decision to run Tool depending on current data.
@@ -49,7 +50,7 @@ class DeathTool(Tool):
         }
 
     @staticmethod
-    def get_lst_output_data_types() -> list[str]:
+    def get_lst_output_data_types() -> List[str]:
         """
         Function which return the list of data types which can be receive by using this Tool.
         It's will help to make decision to complete profile to get more information.
@@ -70,7 +71,7 @@ class DeathTool(Tool):
         firstname = str(self.get_default_profile().get_firstname())
         lastname = str(self.get_default_profile().get_lastname())
 
-        death_results: list[dict] = self.list_deads(firstname, lastname)
+        death_results: List[dict] = self.list_deads(firstname, lastname)
 
         # Create a profile for each Death account found
         # because each account might be a different person
@@ -91,7 +92,7 @@ class DeathTool(Tool):
 
             self.append_profile(profile)
 
-    def list_deads_death_between(self, firstname: str, lastname: str, year_range: tuple[int, int]) -> list:
+    def list_deads_death_between(self, firstname: str, lastname: str, year_range: Tuple[int, int]) -> list:
         deads = []
 
         try:
@@ -171,7 +172,7 @@ class DeathTool(Tool):
 
             # Here are all the information about the matching deads
             # In the rest of the script, we reduce those information
-            lst_deads: list[dict] = res_json['response'].get('persons', [])
+            lst_deads: List[dict] = res_json['response'].get('persons', [])
             print_debug("Found " + str(len(lst_deads)) + " match"
                 + ("es" if len(lst_deads) > 1 else "") + " for " + firstname.capitalize()
                 + " " + lastname.capitalize() + " in a fuzzy search.")
